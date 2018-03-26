@@ -251,11 +251,13 @@ local function bboxencode2coords(bbox_encode)
   local y = torch.div(bbox_encode % 1e9, 1e6)
   local width = torch.div(bbox_encode % 1e6, 1e3)
   local height = bbox_encode % 1e3
+  local area = torch.cmul(width, height)
+  local perimeter = torch.add(torch.mul(width, 2), torch.mul(height, 2))
   local bbox_coords = torch.Tensor(bbox_encode:size(1), bbox_encode:size(2), 4):typeAs(x):zero()
   bbox_coords[{ {}, {}, 1 }] = x
   bbox_coords[{ {}, {}, 2 }] = y
-  bbox_coords[{ {}, {}, 3 }] = width
-  bbox_coords[{ {}, {}, 4 }] = height
+  bbox_coords[{ {}, {}, 3 }] = perimeter
+  bbox_coords[{ {}, {}, 4 }] = area
   -- 608x608 is the YOLO object detection output dimention
   bbox_coords = bbox_coords:float():div(608)
   return bbox_coords
