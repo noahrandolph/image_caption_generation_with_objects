@@ -1,0 +1,1082 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{cocoEvalCap\_object\_model\_compare}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}21}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+         \PY{k+kn}{from} \PY{n+nn}{pycocotools.coco} \PY{k+kn}{import} \PY{n}{COCO}
+         \PY{k+kn}{from} \PY{n+nn}{pycocoevalcap.eval} \PY{k+kn}{import} \PY{n}{COCOEvalCap}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
+         \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
+         \PY{k+kn}{import} \PY{n+nn}{skimage.io} \PY{k+kn}{as} \PY{n+nn}{io}
+         \PY{k+kn}{import} \PY{n+nn}{pylab}
+         
+         \PY{k+kn}{import} \PY{n+nn}{json}
+         \PY{k+kn}{from} \PY{n+nn}{json} \PY{k+kn}{import} \PY{n}{encoder}
+         \PY{n}{encoder}\PY{o}{.}\PY{n}{FLOAT\PYZus{}REPR} \PY{o}{=} \PY{k}{lambda} \PY{n}{o}\PY{p}{:} \PY{n}{format}\PY{p}{(}\PY{n}{o}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.3f}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}22}]:} \PY{c+c1}{\PYZsh{} set up file names and pathes}
+         \PY{n}{dataDir}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/coco\PYZhy{}caption/coco\PYZhy{}caption}\PY{l+s+s1}{\PYZsq{}}
+         \PY{n}{dataType}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val2014}\PY{l+s+s1}{\PYZsq{}}
+         \PY{n}{algName} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{object\PYZus{}only\PYZus{}original}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{area\PYZus{}and\PYZus{}perimeter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{area\PYZus{}and\PYZus{}width}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{annFile}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{/annotations/captions\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{dataDir}\PY{p}{,}\PY{n}{dataType}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}23}]:} \PY{c+c1}{\PYZsh{} continue set up file names and pathes}
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} object\PYZus{}only\PYZus{}original obj2text model with object length and width}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}results\PYZus{}unfiltered} \PY{o}{=} \PY{n}{json}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{f}\PY{p}{)}                
+         \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}results} \PY{o}{=} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}results\PYZus{}unfiltered}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val\PYZus{}predictions}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{c+c1}{\PYZsh{} save to file so that coco.loadRes works without error}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/filtered/filtered\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{json}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}results}\PY{p}{,} \PY{n}{f}\PY{p}{)}
+         \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}results\PYZus{}resFile} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/filtered/filtered\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and perimeter (in place of length and width)}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}results\PYZus{}unfiltered} \PY{o}{=} \PY{n}{json}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{f}\PY{p}{)}                
+         \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}results} \PY{o}{=} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}results\PYZus{}unfiltered}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val\PYZus{}predictions}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{c+c1}{\PYZsh{} save to file so that coco.loadRes works without error}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/filtered/filtered\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{json}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}results}\PY{p}{,} \PY{n}{f}\PY{p}{)}
+         \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}results\PYZus{}resFile} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/filtered/filtered\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and width (in place of length and width)}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results\PYZus{}unfiltered} \PY{o}{=} \PY{n}{json}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{f}\PY{p}{)}                
+         \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results} \PY{o}{=} \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results\PYZus{}unfiltered}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val\PYZus{}predictions}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{c+c1}{\PYZsh{} save to file so that coco.loadRes works without error}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/filtered/filtered\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{json}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results}\PY{p}{,} \PY{n}{f}\PY{p}{)}
+         \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results\PYZus{}resFile} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/filtered/filtered\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width obj2text model with object area and width (in place of length and width)}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results\PYZus{}unfiltered} \PY{o}{=} \PY{n}{json}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{f}\PY{p}{)}                
+         \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results} \PY{o}{=} \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results\PYZus{}unfiltered}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{val\PYZus{}predictions}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{c+c1}{\PYZsh{} save to file so that coco.loadRes works without error}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/filtered/filtered\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{json}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results}\PY{p}{,} \PY{n}{f}\PY{p}{)}
+         \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}results\PYZus{}resFile} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/project\PYZus{}results/filtered/filtered\PYZus{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{.json}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{algName}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} create coco object and cocoRes objects}
+         \PY{n}{coco} \PY{o}{=} \PY{n}{COCO}\PY{p}{(}\PY{n}{annFile}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} object\PYZus{}only\PYZus{}original obj2text model with object length and width}
+         \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoRes} \PY{o}{=} \PY{n}{coco}\PY{o}{.}\PY{n}{loadRes}\PY{p}{(}\PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}results\PYZus{}resFile}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and perimeter (in place of length and width)}
+         \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoRes} \PY{o}{=} \PY{n}{coco}\PY{o}{.}\PY{n}{loadRes}\PY{p}{(}\PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}results\PYZus{}resFile}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and width (in place of length and width)}
+         \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}cocoRes} \PY{o}{=} \PY{n}{coco}\PY{o}{.}\PY{n}{loadRes}\PY{p}{(}\PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}results\PYZus{}resFile}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width obj2text model with object area and width (in place of length and width)}
+         \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}cocoRes} \PY{o}{=} \PY{n}{coco}\PY{o}{.}\PY{n}{loadRes}\PY{p}{(}\PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}results\PYZus{}resFile}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+loading annotations into memory{\ldots}
+0:00:00.749446
+creating index{\ldots}
+index created!
+Loading and preparing results{\ldots}     
+DONE (t=0.04s)
+creating index{\ldots}
+index created!
+Loading and preparing results{\ldots}     
+DONE (t=0.03s)
+creating index{\ldots}
+index created!
+Loading and preparing results{\ldots}     
+DONE (t=0.03s)
+creating index{\ldots}
+index created!
+Loading and preparing results{\ldots}     
+DONE (t=0.04s)
+creating index{\ldots}
+index created!
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}25}]:} \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} object\PYZus{}only\PYZus{}original obj2text model with object length and width}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{***object\PYZus{}only\PYZus{}original obj2text Model***}\PY{l+s+s1}{\PYZsq{}}
+         \PY{c+c1}{\PYZsh{} create cocoEval object by taking coco and cocoRes}
+         \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoEval} \PY{o}{=} \PY{n}{COCOEvalCap}\PY{p}{(}\PY{n}{coco}\PY{p}{,} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoRes}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} evaluate on a subset of images by setting}
+         \PY{c+c1}{\PYZsh{} cocoEval.params[\PYZsq{}image\PYZus{}id\PYZsq{}] = cocoRes.getImgIds()}
+         \PY{c+c1}{\PYZsh{} please remove this line when evaluating the full validation set}
+         \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoEval}\PY{o}{.}\PY{n}{params}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{image\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoRes}\PY{o}{.}\PY{n}{getImgIds}\PY{p}{(}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} evaluate results}
+         \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoEval}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and perimeter (in place of length and width)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{***Area and Perimeter Model***}\PY{l+s+s1}{\PYZsq{}}
+         \PY{c+c1}{\PYZsh{} create cocoEval object by taking coco and cocoRes}
+         \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoEval} \PY{o}{=} \PY{n}{COCOEvalCap}\PY{p}{(}\PY{n}{coco}\PY{p}{,} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoRes}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} evaluate on a subset of images by setting}
+         \PY{c+c1}{\PYZsh{} cocoEval.params[\PYZsq{}image\PYZus{}id\PYZsq{}] = cocoRes.getImgIds()}
+         \PY{c+c1}{\PYZsh{} please remove this line when evaluating the full validation set}
+         \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoEval}\PY{o}{.}\PY{n}{params}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{image\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoRes}\PY{o}{.}\PY{n}{getImgIds}\PY{p}{(}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} evaluate results}
+         \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoEval}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and width (in place of length and width)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{***Area and Width Model***}\PY{l+s+s1}{\PYZsq{}}
+         \PY{c+c1}{\PYZsh{} create cocoEval object by taking coco and cocoRes}
+         \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}cocoEval} \PY{o}{=} \PY{n}{COCOEvalCap}\PY{p}{(}\PY{n}{coco}\PY{p}{,} \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}cocoRes}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} evaluate on a subset of images by setting}
+         \PY{c+c1}{\PYZsh{} cocoEval.params[\PYZsq{}image\PYZus{}id\PYZsq{}] = cocoRes.getImgIds()}
+         \PY{c+c1}{\PYZsh{} please remove this line when evaluating the full validation set}
+         \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}cocoEval}\PY{o}{.}\PY{n}{params}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{image\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}cocoRes}\PY{o}{.}\PY{n}{getImgIds}\PY{p}{(}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} evaluate results}
+         \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}cocoEval}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width obj2text model with object area and width (in place of length and width)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{***CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width obj2text Model***}\PY{l+s+s1}{\PYZsq{}}
+         \PY{c+c1}{\PYZsh{} create cocoEval object by taking coco and cocoRes}
+         \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}cocoEval} \PY{o}{=} \PY{n}{COCOEvalCap}\PY{p}{(}\PY{n}{coco}\PY{p}{,} \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}cocoRes}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} evaluate on a subset of images by setting}
+         \PY{c+c1}{\PYZsh{} cocoEval.params[\PYZsq{}image\PYZus{}id\PYZsq{}] = cocoRes.getImgIds()}
+         \PY{c+c1}{\PYZsh{} please remove this line when evaluating the full validation set}
+         \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}cocoEval}\PY{o}{.}\PY{n}{params}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{image\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}cocoRes}\PY{o}{.}\PY{n}{getImgIds}\PY{p}{(}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} evaluate results}
+         \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}cocoEval}\PY{o}{.}\PY{n}{evaluate}\PY{p}{(}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+***object\_only\_original obj2text Model***
+tokenization{\ldots}
+setting up scorers{\ldots}
+computing Bleu score{\ldots}
+\{'reflen': 30802, 'guess': [31106, 27906, 24706, 21506], 'testlen': 31106, 'correct': [21051, 10159, 4344, 1871]\}
+ratio: 1.00986948899
+Bleu\_1: 0.677
+Bleu\_2: 0.496
+Bleu\_3: 0.351
+Bleu\_4: 0.248
+computing METEOR score{\ldots}
+METEOR: 0.227
+computing Rouge score{\ldots}
+ROUGE\_L: 0.496
+computing CIDEr score{\ldots}
+CIDEr: 0.832
+
+***Area and Perimeter Model***
+tokenization{\ldots}
+setting up scorers{\ldots}
+computing Bleu score{\ldots}
+\{'reflen': 31160, 'guess': [31584, 28384, 25184, 21984], 'testlen': 31584, 'correct': [21253, 10138, 4283, 1813]\}
+ratio: 1.0136071887
+Bleu\_1: 0.673
+Bleu\_2: 0.490
+Bleu\_3: 0.344
+Bleu\_4: 0.241
+computing METEOR score{\ldots}
+METEOR: 0.226
+computing Rouge score{\ldots}
+ROUGE\_L: 0.494
+computing CIDEr score{\ldots}
+CIDEr: 0.813
+
+***Area and Width Model***
+tokenization{\ldots}
+setting up scorers{\ldots}
+computing Bleu score{\ldots}
+\{'reflen': 31063, 'guess': [31408, 28208, 25008, 21808], 'testlen': 31408, 'correct': [21225, 10174, 4338, 1896]\}
+ratio: 1.01110646106
+Bleu\_1: 0.676
+Bleu\_2: 0.494
+Bleu\_3: 0.348
+Bleu\_4: 0.246
+computing METEOR score{\ldots}
+METEOR: 0.226
+computing Rouge score{\ldots}
+ROUGE\_L: 0.495
+computing CIDEr score{\ldots}
+CIDEr: 0.817
+
+***CNN\_and\_Object\_with\_Area\_and\_Width obj2text Model***
+tokenization{\ldots}
+setting up scorers{\ldots}
+computing Bleu score{\ldots}
+\{'reflen': 30878, 'guess': [31261, 28061, 24861, 21661], 'testlen': 31261, 'correct': [21468, 10593, 4614, 2088]\}
+ratio: 1.01240365309
+Bleu\_1: 0.687
+Bleu\_2: 0.509
+Bleu\_3: 0.364
+Bleu\_4: 0.261
+computing METEOR score{\ldots}
+METEOR: 0.232
+computing Rouge score{\ldots}
+ROUGE\_L: 0.504
+computing CIDEr score{\ldots}
+CIDEr: 0.858
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}26}]:} \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} object\PYZus{}only\PYZus{}original obj2text model with object length and width}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{***object\PYZus{}only\PYZus{}original obj2text Model***}\PY{l+s+s1}{\PYZsq{}}
+         \PY{c+c1}{\PYZsh{} print output evaluation scores}
+         \PY{k}{for} \PY{n}{metric}\PY{p}{,} \PY{n}{score} \PY{o+ow}{in} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoEval}\PY{o}{.}\PY{n}{eval}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{score}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}   
+          
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and perimeter (in place of length and width)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{***Area and Perimeter Model***}\PY{l+s+s1}{\PYZsq{}}
+         \PY{c+c1}{\PYZsh{} print output evaluation scores}
+         \PY{k}{for} \PY{n}{metric}\PY{p}{,} \PY{n}{score} \PY{o+ow}{in} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoEval}\PY{o}{.}\PY{n}{eval}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{score}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+             
+             
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and width (in place of length and width)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{***Area and Width Model***}\PY{l+s+s1}{\PYZsq{}}
+         \PY{c+c1}{\PYZsh{} print output evaluation scores}
+         \PY{k}{for} \PY{n}{metric}\PY{p}{,} \PY{n}{score} \PY{o+ow}{in} \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}cocoEval}\PY{o}{.}\PY{n}{eval}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{score}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width obj2text model with object area and width (in place of length and width)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{***CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width obj2text Model***}\PY{l+s+s1}{\PYZsq{}}
+         \PY{c+c1}{\PYZsh{} print output evaluation scores}
+         \PY{k}{for} \PY{n}{metric}\PY{p}{,} \PY{n}{score} \PY{o+ow}{in} \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}cocoEval}\PY{o}{.}\PY{n}{eval}\PY{o}{.}\PY{n}{items}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{score}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+***object\_only\_original obj2text Model***
+CIDEr: 0.832
+Bleu\_4: 0.248
+Bleu\_3: 0.351
+Bleu\_2: 0.496
+Bleu\_1: 0.677
+ROUGE\_L: 0.496
+METEOR: 0.227
+
+***Area and Perimeter Model***
+CIDEr: 0.813
+Bleu\_4: 0.241
+Bleu\_3: 0.344
+Bleu\_2: 0.490
+Bleu\_1: 0.673
+ROUGE\_L: 0.494
+METEOR: 0.226
+
+***Area and Width Model***
+CIDEr: 0.817
+Bleu\_4: 0.246
+Bleu\_3: 0.348
+Bleu\_2: 0.494
+Bleu\_1: 0.676
+ROUGE\_L: 0.495
+METEOR: 0.226
+
+***CNN\_and\_Object\_with\_Area\_and\_Width obj2text Model***
+CIDEr: 0.858
+Bleu\_4: 0.261
+Bleu\_3: 0.364
+Bleu\_2: 0.509
+Bleu\_1: 0.687
+ROUGE\_L: 0.504
+METEOR: 0.232
+
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}27}]:} \PY{c+c1}{\PYZsh{} Get comparative word counts from the models}
+         
+         \PY{c+c1}{\PYZsh{} test\PYZus{}words = \PYZob{}\PYZsq{}behind\PYZsq{}: 0, \PYZsq{}in front of\PYZsq{}: 0, \PYZsq{}back\PYZsq{}: 0, \PYZsq{}background\PYZsq{}: 0, \PYZsq{}next to\PYZsq{}: 0,}
+         \PY{c+c1}{\PYZsh{}                              \PYZsq{}beside\PYZsq{}: 0, \PYZsq{}ahead\PYZsq{}: 0, \PYZsq{}bigger\PYZsq{}: 0, \PYZsq{}smaller\PYZsq{}: 0, \PYZsq{}larger\PYZsq{}: 0, \PYZsq{}baby\PYZsq{}: 0, \PYZsq{}wider\PYZsq{}: 0,}
+         \PY{c+c1}{\PYZsh{}                              \PYZsq{}taller\PYZsq{}: 0, \PYZsq{}longer\PYZsq{}: 0, \PYZsq{}shorter\PYZsq{}: 0, \PYZsq{}short\PYZsq{}: 0, \PYZsq{}big\PYZsq{}: 0, \PYZsq{}tall\PYZsq{}: 0, \PYZsq{}small\PYZsq{}: 0,}
+         \PY{c+c1}{\PYZsh{}               \PYZsq{}large\PYZsq{}: 0, \PYZsq{}wide\PYZsq{}: 0, \PYZsq{}skinny\PYZsq{}: 0, \PYZsq{}before\PYZsq{}: 0, \PYZsq{}after\PYZsq{}: 0\PYZcb{}}
+         
+         \PY{n}{test\PYZus{}words} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{behind}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{front}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{back}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{background}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bigger}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{larger}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,}
+                       \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{baby}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{big}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{short}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{small}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{tall}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{large}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{0}\PY{p}{\PYZcb{}}
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} object\PYZus{}only\PYZus{}original obj2text model with object length and width}
+         \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}word\PYZus{}counts} \PY{o}{=} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+         \PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{value} \PY{o+ow}{in} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoRes}\PY{o}{.}\PY{n}{anns}\PY{o}{.}\PY{n}{iteritems}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{for} \PY{n}{word} \PY{o+ow}{in} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                 \PY{k}{if} \PY{n}{word} \PY{o+ow}{in} \PY{n}{value}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{caption}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+                     \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}word\PYZus{}counts}\PY{p}{[}\PY{n}{word}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}            
+         \PY{k}{print} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}word\PYZus{}counts}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and perimeter (in place of length and width)}
+         \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}word\PYZus{}counts} \PY{o}{=} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+         \PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{value} \PY{o+ow}{in} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoRes}\PY{o}{.}\PY{n}{anns}\PY{o}{.}\PY{n}{iteritems}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{for} \PY{n}{word} \PY{o+ow}{in} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                 \PY{k}{if} \PY{n}{word} \PY{o+ow}{in} \PY{n}{value}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{caption}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+                     \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}word\PYZus{}counts}\PY{p}{[}\PY{n}{word}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}            
+         \PY{k}{print} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}word\PYZus{}counts}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} model with object area and width (in place of length and width)}
+         \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}word\PYZus{}counts} \PY{o}{=} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+         \PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{value} \PY{o+ow}{in} \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}cocoRes}\PY{o}{.}\PY{n}{anns}\PY{o}{.}\PY{n}{iteritems}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{for} \PY{n}{word} \PY{o+ow}{in} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                 \PY{k}{if} \PY{n}{word} \PY{o+ow}{in} \PY{n}{value}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{caption}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+                     \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}word\PYZus{}counts}\PY{p}{[}\PY{n}{word}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}            
+         \PY{k}{print} \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}word\PYZus{}counts}
+         
+         
+         \PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width obj2text model with object area and width (in place of length and width)}
+         \PY{n}{CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width\PYZus{}word\PYZus{}counts} \PY{o}{=} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+         \PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{value} \PY{o+ow}{in} \PY{n}{CNN\PYZus{}and\PYZus{}object\PYZus{}area\PYZus{}and\PYZus{}width\PYZus{}cocoRes}\PY{o}{.}\PY{n}{anns}\PY{o}{.}\PY{n}{iteritems}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{for} \PY{n}{word} \PY{o+ow}{in} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                 \PY{k}{if} \PY{n}{word} \PY{o+ow}{in} \PY{n}{value}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{caption}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+                     \PY{n}{CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width\PYZus{}word\PYZus{}counts}\PY{p}{[}\PY{n}{word}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}            
+         \PY{k}{print} \PY{n}{CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width\PYZus{}word\PYZus{}counts}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+\{'short': 3, 'big': 0, 'larger': 3, 'back': 116, 'large': 109, 'baby': 15, 'behind': 1, 'background': 80, 'tall': 11, 'front': 143, 'small': 11, 'bigger': 0\}
+\{'short': 9, 'big': 0, 'larger': 2, 'back': 147, 'large': 121, 'baby': 14, 'behind': 1, 'background': 110, 'tall': 19, 'front': 125, 'small': 7, 'bigger': 0\}
+\{'short': 4, 'big': 2, 'larger': 0, 'back': 82, 'large': 111, 'baby': 19, 'behind': 1, 'background': 48, 'tall': 3, 'front': 123, 'small': 2, 'bigger': 2\}
+\{'short': 1, 'big': 4, 'larger': 0, 'back': 109, 'large': 89, 'baby': 18, 'behind': 2, 'background': 71, 'tall': 18, 'front': 109, 'small': 7, 'bigger': 4\}
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}28}]:} \PY{n}{word\PYZus{}count\PYZus{}averages} \PY{o}{=} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+         \PY{k}{for} \PY{n}{key}\PY{p}{,} \PY{n}{value} \PY{o+ow}{in} \PY{n}{word\PYZus{}count\PYZus{}averages}\PY{o}{.}\PY{n}{iteritems}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{n}{word\PYZus{}count\PYZus{}averages}\PY{p}{[}\PY{n}{key}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{[}\PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}word\PYZus{}counts}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{,} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}word\PYZus{}counts}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{,}
+                                                 \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}word\PYZus{}counts}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{,}
+                                                 \PY{n}{CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width\PYZus{}word\PYZus{}counts}\PY{p}{[}\PY{n}{key}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+                 
+         \PY{n}{sorted\PYZus{}word\PYZus{}count\PYZus{}averages} \PY{o}{=} \PY{n+nb}{sorted}\PY{p}{(}\PY{n}{word\PYZus{}count\PYZus{}averages}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{n}{word\PYZus{}count\PYZus{}averages}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}getitem\PYZus{}\PYZus{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}29}]:} \PY{n}{pylab}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{figure.figsize}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mf}{16.0}\PY{p}{,} \PY{l+m+mf}{9.0}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Plot word counts by model}
+         \PY{n}{word\PYZus{}counts} \PY{o}{=} \PY{p}{[}\PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}word\PYZus{}counts}\PY{p}{,} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}word\PYZus{}counts}\PY{p}{,} \PY{n}{area\PYZus{}and\PYZus{}width\PYZus{}word\PYZus{}counts}\PY{p}{,}
+                       \PY{n}{CNN\PYZus{}and\PYZus{}Object\PYZus{}with\PYZus{}Area\PYZus{}and\PYZus{}Width\PYZus{}word\PYZus{}counts}\PY{p}{]}
+         
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{ax} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
+         
+         \PY{n}{space} \PY{o}{=} \PY{l+m+mf}{0.15}
+         
+         \PY{n}{models} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{objects\PYZus{}only\PYZus{}original}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{objects\PYZus{}only\PYZus{}area\PYZus{}and\PYZus{}perimeter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{objects\PYZus{}only\PYZus{}area\PYZus{}and\PYZus{}width}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CNN\PYZus{}and\PYZus{}objects\PYZus{}with\PYZus{}area\PYZus{}and\PYZus{}width}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{words} \PY{o}{=} \PY{n}{sorted\PYZus{}word\PYZus{}count\PYZus{}averages}
+         
+         \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{models}\PY{p}{)}
+         
+         \PY{n}{width} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{space}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{models}\PY{p}{)}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{width:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{width}
+         
+         \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{p}{(}\PY{n}{model}\PY{p}{,} \PY{n}{counts}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n+nb}{zip}\PY{p}{(}\PY{n}{models}\PY{p}{,} \PY{n}{word\PYZus{}counts}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{model:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{model}
+             \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{counts:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{counts}
+             \PY{n}{vals} \PY{o}{=} \PY{p}{[}\PY{n}{counts}\PY{p}{[}\PY{n}{w}\PY{p}{]} \PY{k}{for} \PY{n}{w} \PY{o+ow}{in} \PY{n}{sorted\PYZus{}word\PYZus{}count\PYZus{}averages}\PY{p}{]}
+             \PY{n}{pos} \PY{o}{=} \PY{p}{[}\PY{n}{j} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{o}{.}\PY{l+m+mi}{67} \PY{o}{\PYZhy{}} \PY{n}{space}\PY{p}{)} \PY{o}{/} \PY{l+m+mf}{2.} \PY{o}{+} \PY{n}{i} \PY{o}{*} \PY{n}{width} \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{words}\PY{p}{)}\PY{p}{)}\PY{p}{]}
+             \PY{k}{print} \PY{n}{pos}
+             \PY{n}{ax}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{pos}\PY{p}{,} \PY{n}{vals}\PY{p}{,} \PY{n}{width}\PY{o}{=}\PY{n}{width}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{n}{model}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{Accent}\PY{p}{(}\PY{n+nb}{float}\PY{p}{(}\PY{n}{i}\PY{p}{)} \PY{o}{/} \PY{n}{n}\PY{p}{)}\PY{p}{)}
+             
+         \PY{c+c1}{\PYZsh{}ax.set\PYZus{}xticks(words)}
+         \PY{c+c1}{\PYZsh{}ax.set\PYZus{}xticklabels(words)}
+         \PY{c+c1}{\PYZsh{}plt.setp(plt.xticks(), rotation=90)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{words}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{words}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}print(plt.xticks())}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{word/phrase count}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{word/phrase}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         \PY{n}{handles}\PY{p}{,} \PY{n}{labels} \PY{o}{=} \PY{n}{ax}\PY{o}{.}\PY{n}{get\PYZus{}legend\PYZus{}handles\PYZus{}labels}\PY{p}{(}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{handles}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{labels}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+width: 0.2125
+model: objects\_only\_original
+counts: \{'short': 3, 'big': 0, 'larger': 3, 'back': 116, 'large': 109, 'baby': 15, 'behind': 1, 'background': 80, 'tall': 11, 'front': 143, 'small': 11, 'bigger': 0\}
+[-0.26, 0.74, 1.74, 2.74, 3.74, 4.74, 5.74, 6.74, 7.74, 8.74, 9.74, 10.74]
+model: objects\_only\_area\_and\_perimeter
+counts: \{'short': 9, 'big': 0, 'larger': 2, 'back': 147, 'large': 121, 'baby': 14, 'behind': 1, 'background': 110, 'tall': 19, 'front': 125, 'small': 7, 'bigger': 0\}
+[-0.047500000000000014, 0.9525, 1.9525, 2.9525, 3.9525, 4.952500000000001, 5.952500000000001, 6.952500000000001, 7.952500000000001, 8.9525, 9.9525, 10.9525]
+model: objects\_only\_area\_and\_width
+counts: \{'short': 4, 'big': 2, 'larger': 0, 'back': 82, 'large': 111, 'baby': 19, 'behind': 1, 'background': 48, 'tall': 3, 'front': 123, 'small': 2, 'bigger': 2\}
+[0.16499999999999998, 1.165, 2.165, 3.165, 4.165, 5.165, 6.165, 7.165, 8.165000000000001, 9.165000000000001, 10.165000000000001, 11.165000000000001]
+model: CNN\_and\_objects\_with\_area\_and\_width
+counts: \{'short': 1, 'big': 4, 'larger': 0, 'back': 109, 'large': 89, 'baby': 18, 'behind': 2, 'background': 71, 'tall': 18, 'front': 109, 'small': 7, 'bigger': 4\}
+[0.37749999999999995, 1.3775, 2.3775, 3.3775000000000004, 4.3775, 5.3775, 6.3775, 7.3775, 8.3775, 9.3775, 10.3775, 11.3775]
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}29}]:} <matplotlib.legend.Legend at 0x7f068900bc50>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_8_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}30}]:} \PY{c+c1}{\PYZsh{} get all images with repeat objects}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/coco/coco\PYZus{}yolo\PYZus{}objname\PYZus{}location.json}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+                 \PY{n}{coco\PYZus{}yolo\PYZus{}objname\PYZus{}location} \PY{o}{=} \PY{n}{json}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{f}\PY{p}{)}
+         
+         \PY{n}{ids\PYZus{}w\PYZus{}multiple\PYZus{}of\PYZus{}a\PYZus{}cat} \PY{o}{=} \PY{p}{[}\PY{p}{]}        
+                 
+         \PY{k}{for} \PY{n}{element} \PY{o+ow}{in} \PY{n}{coco\PYZus{}yolo\PYZus{}objname\PYZus{}location}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} test for repeats\PYZhy{} below evaluates to True if there are repeats}
+             \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{element}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{full\PYZus{}categories}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)} \PY{o}{!=} \PY{n+nb}{len}\PY{p}{(}\PY{n+nb}{set}\PY{p}{(}\PY{n}{element}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{full\PYZus{}categories}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                 \PY{n}{ids\PYZus{}w\PYZus{}multiple\PYZus{}of\PYZus{}a\PYZus{}cat}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{element}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{id}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{n}{potentially\PYZus{}interesting\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{k}{for} \PY{n}{new\PYZus{}value}\PY{p}{,} \PY{n}{old\PYZus{}value} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoRes}\PY{o}{.}\PY{n}{anns}\PY{o}{.}\PY{n}{itervalues}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoRes}\PY{o}{.}\PY{n}{anns}\PY{o}{.}\PY{n}{itervalues}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{k}{if} \PY{n}{new\PYZus{}value}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{image\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o+ow}{in} \PY{n}{ids\PYZus{}w\PYZus{}multiple\PYZus{}of\PYZus{}a\PYZus{}cat}\PY{p}{:}
+                 \PY{k}{for} \PY{n}{word} \PY{o+ow}{in} \PY{n}{test\PYZus{}words}\PY{o}{.}\PY{n}{keys}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                     \PY{k}{if} \PY{p}{(}\PY{n}{word} \PY{o+ow}{in} \PY{n}{new\PYZus{}value}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{caption}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{o+ow}{and} \PY{p}{(}\PY{n}{word} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{old\PYZus{}value}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{caption}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+                         \PY{n}{potentially\PYZus{}interesting\PYZus{}images}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{new\PYZus{}value}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{image\PYZus{}id}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+                         
+         \PY{k}{print}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{potentially\PYZus{}interesting\PYZus{}images}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+242
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}36}]:} \PY{n}{interesting\PYZus{}images} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{562805}\PY{p}{,} \PY{l+m+mi}{221222}\PY{p}{,} \PY{l+m+mi}{559195}\PY{p}{,} \PY{l+m+mi}{198178}\PY{p}{,} \PY{l+m+mi}{454444}\PY{p}{,} \PY{l+m+mi}{504726}\PY{p}{,} \PY{l+m+mi}{46185}\PY{p}{,} \PY{l+m+mi}{204536}\PY{p}{,}
+                              \PY{l+m+mi}{322307}\PY{p}{,} \PY{l+m+mi}{490860}\PY{p}{,} \PY{l+m+mi}{92034}\PY{p}{]}
+         
+         \PY{c+c1}{\PYZsh{} show interesting images}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{interesting\PYZus{}images}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ground truth captions:}\PY{l+s+s1}{\PYZsq{}}
+             \PY{n}{imgId} \PY{o}{=} \PY{n}{interesting\PYZus{}images}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+             \PY{k}{print}\PY{p}{(}\PY{n}{imgId}\PY{p}{)}
+             \PY{n}{annIds} \PY{o}{=} \PY{n}{coco}\PY{o}{.}\PY{n}{getAnnIds}\PY{p}{(}\PY{n}{imgIds}\PY{o}{=}\PY{n}{imgId}\PY{p}{)}
+             \PY{n}{anns} \PY{o}{=} \PY{n}{coco}\PY{o}{.}\PY{n}{loadAnns}\PY{p}{(}\PY{n}{annIds}\PY{p}{)}
+             \PY{n}{coco}\PY{o}{.}\PY{n}{showAnns}\PY{p}{(}\PY{n}{anns}\PY{p}{)}
+         
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{object\PYZhy{}only area and perimeter generated caption:}\PY{l+s+s1}{\PYZsq{}}
+             \PY{n}{annIds} \PY{o}{=} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoRes}\PY{o}{.}\PY{n}{getAnnIds}\PY{p}{(}\PY{n}{imgIds}\PY{o}{=}\PY{n}{imgId}\PY{p}{)}
+             \PY{n}{anns} \PY{o}{=} \PY{n}{area\PYZus{}and\PYZus{}perimeter\PYZus{}cocoRes}\PY{o}{.}\PY{n}{loadAnns}\PY{p}{(}\PY{n}{annIds}\PY{p}{)}
+             \PY{n}{coco}\PY{o}{.}\PY{n}{showAnns}\PY{p}{(}\PY{n}{anns}\PY{p}{)}
+         
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+             \PY{k}{print} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{object\PYZhy{}only original generated caption:}\PY{l+s+s1}{\PYZsq{}}
+             \PY{n}{annIds} \PY{o}{=} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoRes}\PY{o}{.}\PY{n}{getAnnIds}\PY{p}{(}\PY{n}{imgIds}\PY{o}{=}\PY{n}{imgId}\PY{p}{)}
+             \PY{n}{anns} \PY{o}{=} \PY{n}{object\PYZus{}only\PYZus{}original\PYZus{}cocoRes}\PY{o}{.}\PY{n}{loadAnns}\PY{p}{(}\PY{n}{annIds}\PY{p}{)}
+             \PY{n}{coco}\PY{o}{.}\PY{n}{showAnns}\PY{p}{(}\PY{n}{anns}\PY{p}{)}
+         
+             \PY{n}{img} \PY{o}{=} \PY{n}{coco}\PY{o}{.}\PY{n}{loadImgs}\PY{p}{(}\PY{n}{imgId}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+             \PY{n}{I} \PY{o}{=} \PY{n}{io}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/home/ubuntu/obj2text\PYZhy{}neuraltalk2/coco/images/}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{/}\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{\PYZsq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{dataType}\PY{p}{,}\PY{n}{img}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{file\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{I}\PY{p}{)}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+562805
+A modern transportation building with busses lined up for passengers.
+A bus station with buses and people nearby. 
+Buses parked at a bus stop while unloading passengers.
+A bus depot with buses parked in front. 
+some people buildings and three different buses and a tree
+
+
+object-only area and perimeter generated caption:
+a bus is driving down the street with a bus behind it
+
+
+object-only original generated caption:
+a group of people standing on a street next to a bus
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+221222
+a herd of cows stand on some tiled dirt 
+A few cows standing in the dirt near each other.
+Three cows in a dirt field looking at the camera.
+A group of cows hanging out in the muddy part of a field
+a bunch of cows that are standing in a field
+
+
+object-only area and perimeter generated caption:
+a cow standing in a field with a bunch of cows in the background
+
+
+object-only original generated caption:
+a herd of cattle grazing on a lush green field
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+559195
+a white boat is in front of a city on the water
+A boat cruising in front of waterfront skyscrapers.
+A white military boat floating across a large body of water.
+A white ship sailing past an urban area.
+A Coast Guard boat going down a body of river in front of some buildings.
+
+
+object-only area and perimeter generated caption:
+a boat is docked in a lake with a boat in the background
+
+
+object-only original generated caption:
+a boat is docked in the water near a pier
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_5.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+198178
+A large elephant standing next to a small elephant.
+An adult and baby elephant walking beside each other.
+Adult elephant with young walking in grassy area.
+And elephant walks with its baby elephant. 
+A big and a small elephant out in the sun 
+
+
+object-only area and perimeter generated caption:
+a large elephant standing next to a baby elephant
+
+
+object-only original generated caption:
+a large elephant standing next to a tree
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_7.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+454444
+A group of three giraffe standing inside of a cage.
+The three giraffes are being kept indoors for being to see. 
+Three giraffes in an indoor enclosure being photographed by visitors.
+A group of zebras in a glass room with people taking pictures.
+A man seems to be taking shots of four Zebras. 
+
+
+object-only area and perimeter generated caption:
+a man and a woman are standing in front of a giraffe
+
+
+object-only original generated caption:
+a man is standing next to a giraffe
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_9.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+504726
+Two men with bags walking towards a bus.
+A black and white photo of two men carrying luggage.
+Two men walk on the sidewalk carrying luggage bags. 
+Two people with luggage walking toward a bus.
+Men carrying heavy suitcases in old fashioned photo.
+
+
+object-only area and perimeter generated caption:
+a man and woman standing in front of a truck
+
+
+object-only original generated caption:
+two people standing next to a bus stop
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_11.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+46185
+two zebras are walking in a field next to some plants
+A couple of zebra standing next to each other.
+A zebra looking downward walking through a field.
+A zebra is standing alone by itself. 
+Two zebras walking in dirt while fenced in. 
+
+
+object-only area and perimeter generated caption:
+a zebra standing next to a baby zebra in a field
+
+
+object-only original generated caption:
+a couple of zebras are standing in a field
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_13.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+204536
+Two elephant walking, the one in the foreground kicking up a some dirt. 
+Two elephants walk around in a large grassy field. 
+two elephants with long walking through the grass
+An elephant kicking some dirt on the ground.
+two very big elephants walking in the wild 
+
+
+object-only area and perimeter generated caption:
+a baby elephant standing next to a larger elephant
+
+
+object-only original generated caption:
+two elephants standing in a field with trees in the background
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_15.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+322307
+A mama elephant standing next to a baby elephant in a cage at a zoo.
+An elephant in a cage with its baby.
+a baby elephant and a large elephant standing near one another
+A ELEPHANT IS WALKING NEXT TO ITS BABY CUTIE!
+The baby elephant stays close to its mother.
+
+
+object-only area and perimeter generated caption:
+a baby elephant standing next to a larger elephant
+
+
+object-only original generated caption:
+two elephants are standing in a field of grass
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_17.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+490860
+A baby elephant panting on a white canvas.
+A baby elephant is painting a picture with it's trunk. 
+An elephant is standing in the dirt drawing on an easel with its trunk.
+An elephant touching a drawing on an easel with his trunk.
+An elephant drawing a picture with it's trunk.
+
+
+object-only area and perimeter generated caption:
+a large elephant standing next to a baby elephant
+
+
+object-only original generated caption:
+a couple of elephants standing next to each other
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_19.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+ground truth captions:
+92034
+An adult and baby elephant grazing in the green grass.
+A big elephant and a small elephant walking through a grassy meadow.
+Elephants are in the tall knee high shaded grass.
+A mama elephant walking next to a baby elephant.
+A large and small elephant in tall grass next to trees and bushes.
+
+
+object-only area and perimeter generated caption:
+a large elephant standing in a field with a baby elephant in the background
+
+
+object-only original generated caption:
+a couple of elephants standing in a field
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_21.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{c+c1}{\PYZsh{} plot score histogram}
+        \PY{n}{ciderScores} \PY{o}{=} \PY{p}{[}\PY{n}{eva}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CIDEr}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{k}{for} \PY{n}{eva} \PY{o+ow}{in} \PY{n}{cocoEval}\PY{o}{.}\PY{n}{evalImgs}\PY{p}{]}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{ciderScores}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Histogram of CIDEr Scores}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CIDEr score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{result counts}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
