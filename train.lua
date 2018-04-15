@@ -257,7 +257,7 @@ local function bboxencode2coords(bbox_encode)
   bbox_coords[{ {}, {}, 1 }] = x
   bbox_coords[{ {}, {}, 2 }] = y
   bbox_coords[{ {}, {}, 3 }] = width
-  bbox_coords[{ {}, {}, 4 }] = height
+  bbox_coords[{ {}, {}, 4 }] = perimeter
   -- 608x608 is the YOLO object detection output dimention
   bbox_coords = bbox_coords:float():div(608)
   return bbox_coords
