@@ -256,8 +256,8 @@ local function bboxencode2coords(bbox_encode)
   local bbox_coords = torch.Tensor(bbox_encode:size(1), bbox_encode:size(2), 4):typeAs(x):zero()
   bbox_coords[{ {}, {}, 1 }] = x
   bbox_coords[{ {}, {}, 2 }] = y
-  bbox_coords[{ {}, {}, 3 }] = width
-  bbox_coords[{ {}, {}, 4 }] = perimeter
+  bbox_coords[{ {}, {}, 3 }] = perimeter
+  bbox_coords[{ {}, {}, 4 }] = area
   -- 608x608 is the YOLO object detection output dimention
   bbox_coords = bbox_coords:float():div(608)
   return bbox_coords
@@ -343,12 +343,12 @@ local function eval_split(split, evalopt)
     loss_sum = loss_sum + loss
     loss_evals = loss_evals + 1
 
-    local sample_opts = { sample_max = 1, beam_size = 0, temperature = 1.0 }
+    local sample_opts = { sample_max = 1, beam_size = 5, temperature = 1.0 }
     local seq = protos.lm:sample(forward_feats.lm_input_feats_no_expand, sample_opts)
 
     local sents = net_utils.decode_sequence(vocab, seq)
     local gt_sents = net_utils.decode_sequence(vocab, data.labels)
-    for k = 1, #sents do
+    for k = 5, #sents do
       local entry = { image_id = data.infos[k].id, caption = sents[k] }
       table.insert(predictions, entry)
       if verbose then
