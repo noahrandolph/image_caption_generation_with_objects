@@ -1,184 +1,526 @@
-# W266 Final Project: Noah Randolph and Harry Xu
-
-#### Original obj2text repo README below:
-___
-
-# OBJ2TEXT
-:point_right: Checkout [the Pytorch implementation](https://github.com/xuwangyin/pytorch-tutorial/tree/master/tutorials/03-advanced/image_captioning).
-
-OBJ2TEXT is a sequence-to-sequence model that takes object layout (sequence of pairs of object names and locations) as input and generates a natural language description of the input layout. This repository contains code for running all the experiments in the paper [OBJ2TEXT: Generating Visually Descriptive Language from Object Layouts](https://arxiv.org/abs/1707.07102). You can train different models by specifying different values for the option `-generate_from`:
- * `objclass`, generate caption from a sequence of object classes (the set of object names with all duplicates removed)
- * `objname`, generate caption from a sequence of object names
- * `objname_location`, generate caption from a sequence of pairs of object names and bounding-box locations
- * `objname_location_image`, generate captions from a sequence of pairs of object names and bounding-box locations, and CNN visual features
- * `image` the default Neuraltalk2 implementation which generates captions from CNN visual features
- 
-For example, you can use the following shell command to run the proposed model OBJ2TEXT:
-```bash
-th train.lua -generate_from objname_location -input_h5 coco/cocotalk_objname_location.h5 -input_json coco/cocotalk.json 
-```
-You can optionally use attention mechanism for generating from `objclass`, `objname`, and `objname_location` with the `-attention with_attention` option.
-
-To generate `cocotalk_objname_location.h5` that contains [YOLO2](https://pjreddie.com/darknet/yolo/) detected object names, locations, and original COCO captions:
- 1. setup training files according to https://github.com/karpathy/neuraltalk2/#id-like-to-train-my-own-network-on-ms-coco
- 2. collect object detection results on MS COCO dataset according to https://github.com/xuwangyin/darknet/tree/yolo-coco-result, put the detection result file `coco_detection_result` into `./coco/` directory (I have included one copy in this repository in case you don't want to do it by yourself)
- 3. inside the `coco/` directory run `python detection_add_captions.py`, which will generate a json file `coco_yolo_objname_location.json` that contains detected object names, locations and captions for each image.
- 4. use the following command to generate the hdf5 file `python prepro_obj2text.py --input_json coco/coco_yolo_objname_location.json --images_root coco/images --word_count_threshold 5 --output_json coco/cocotalk.json --output_h5 coco/cocotalk_objname_location.h5`
-
-The followings are the original Neuraltalk2 README.
-
-# NeuralTalk2
-
-**Update (September 22, 2016)**: The Google Brain team has [released the image captioning model](https://research.googleblog.com/2016/09/show-and-tell-image-captioning-open.html) of Vinyals et al. (2015). The core model is very similar to NeuralTalk2 (a CNN followed by RNN), but the Google release should work significantly better as a result of better CNN, some tricks, and more careful engineering. Find it under [im2txt](https://github.com/tensorflow/models/tree/master/im2txt/im2txt) repo in tensorflow. I'll leave this code base up for educational purposes and as a Torch implementation.
-
-Recurrent Neural Network captions your images. Now much faster and better than the original [NeuralTalk](https://github.com/karpathy/neuraltalk). Compared to the original NeuralTalk this implementation is **batched, uses Torch, runs on a GPU, and supports CNN finetuning**. All of these together result in quite a large increase in training speed for the Language Model (~100x), but overall not as much because we also have to forward a VGGNet. However, overall very good models can be trained in 2-3 days, and they show a much better performance.
-
-This is an early code release that works great but is slightly hastily released and probably requires some code reading of inline comments (which I tried to be quite good with in general). I will be improving it over time but wanted to push the code out there because I promised it to too many people.
-
-This current code (and the pretrained model) gets ~0.9 CIDEr, which would place it around spot #8 on the [codalab leaderboard](https://competitions.codalab.org/competitions/3221#results). I will submit the actual result soon.
-
-![teaser results](https://raw.github.com/karpathy/neuraltalk2/master/vis/teaser.jpeg)
-
-You can find a few more example results on the [demo page](http://cs.stanford.edu/people/karpathy/neuraltalk2/demo.html). These results will improve a bit more once the last few bells and whistles are in place (e.g. beam search, ensembling, reranking).
-
-There's also a [fun video](https://vimeo.com/146492001) by [@kcimc](https://twitter.com/kcimc), where he runs a neuraltalk2 pretrained model in real time on his laptop during a walk in Amsterdam.
-
-### Requirements
-
-
-#### For evaluation only
-
-This code is written in Lua and requires [Torch](http://torch.ch/). If you're on Ubuntu, installing Torch in your home directory may look something like: 
-
-```bash
-$ curl -s https://raw.githubusercontent.com/torch/ezinstall/master/install-deps | bash
-$ git clone https://github.com/torch/distro.git ~/torch --recursive
-$ cd ~/torch; 
-$ ./install.sh      # and enter "yes" at the end to modify your bashrc
-$ source ~/.bashrc
-```
-
-See the Torch installation documentation for more details. After Torch is installed we need to get a few more packages using [LuaRocks](https://luarocks.org/) (which already came with the Torch install). In particular:
-
-```bash
-$ luarocks install nn
-$ luarocks install nngraph 
-$ luarocks install image 
-```
-
-We're also going to need the [cjson](http://www.kyne.com.au/~mark/software/lua-cjson-manual.html) library so that we can load/save json files. Follow their [download link](http://www.kyne.com.au/~mark/software/lua-cjson.php) and then look under their section 2.4 for easy luarocks install.
-
-If you'd like to run on an NVIDIA GPU using CUDA (which you really, really want to if you're training a model, since we're using a VGGNet), you'll of course need a GPU, and you will have to install the [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit). Then get the `cutorch` and `cunn` packages:
-
-```bash
-$ luarocks install cutorch
-$ luarocks install cunn
-```
-
-If you'd like to use the cudnn backend (the pretrained checkpoint does), you also have to install [cudnn](https://github.com/soumith/cudnn.torch). First follow the link to [NVIDIA website](https://developer.nvidia.com/cuDNN), register with them and download the cudnn library. Then make sure you adjust your `LD_LIBRARY_PATH` to point to the `lib64` folder that contains the library (e.g. `libcudnn.so.7.0.64`). Then git clone the `cudnn.torch` repo, `cd` inside and do `luarocks make cudnn-scm-1.rockspec` to build the Torch bindings.
-
-#### For training
-
-If you'd like to train your models you will need [loadcaffe](https://github.com/szagoruyko/loadcaffe), since we are using the VGGNet. First, make sure you follow their instructions to install `protobuf` and everything else (e.g. `sudo apt-get install libprotobuf-dev protobuf-compiler`), and then install via luarocks:
-
-```bash
-luarocks install loadcaffe
-```
-
-Finally, you will also need to install [torch-hdf5](https://github.com/deepmind/torch-hdf5), and [h5py](http://www.h5py.org/), since we will be using hdf5 files to store the preprocessed data.
-
-Phew! Quite a few dependencies, sorry no easy way around it :\
-
-### I just want to caption images
-
-In this case you want to run the evaluation script on a pretrained model checkpoint. 
-I trained a decent one on the [MS COCO dataset](http://mscoco.org/) that you can run on your images.
-The pretrained checkpoint can be downloaded here: [pretrained checkpoint link](http://cs.stanford.edu/people/karpathy/neuraltalk2/checkpoint_v1.zip) (600MB). It's large because it contains the weights of a finetuned VGGNet. Now place all your images of interest into a folder, e.g. `blah`, and run
-the eval script:
-
-```bash
-$ th eval.lua -model /path/to/model -image_folder /path/to/image/directory -num_images 10 
-```
-
-This tells the `eval` script to run up to 10 images from the given folder. If you have a big GPU you can speed up the evaluation by increasing `batch_size` (default = 1). Use `-num_images -1` to process all images. The eval script will create an `vis.json` file inside the `vis` folder, which can then be visualized with the provided HTML interface:
-
-```bash
-$ cd vis
-$ python -m SimpleHTTPServer
-```
-
-Now visit `localhost:8000` in your browser and you should see your predicted captions.
-
-You can see an [example visualization demo page here](http://cs.stanford.edu/people/karpathy/neuraltalk2/demo.html).
-
-**Running in Docker**. If you'd like to avoid dependency nightmares, running the codebase from Docker might be a good option. There is one (third-party) [docker repo here](https://github.com/beeva-enriqueotero/docker-neuraltalk2).
-
-**"I only have CPU"**. Okay, in that case download the [cpu model checkpoint](http://cs.stanford.edu/people/karpathy/neuraltalk2/checkpoint_v1_cpu.zip). Make sure you run the eval script with `-gpuid -1` to tell the script to run on CPU. On my machine it takes a bit less than 1 second per image to caption in CPU mode.
-
-**Beam Search**. Beam search is enabled by default because it increases the performance of the search for argmax decoding sequence. However, this is a little more expensive, so if you'd like to evaluate images faster, but at a cost of performance, use `-beam_size 1`. For example, in one of my experiments beam size 2 gives CIDEr 0.922, and beam size 1 gives CIDEr 0.886.
-
-**Running on MSCOCO images**. If you train on MSCOCO (see how below), you will have generated preprocessed MSCOCO images, which you can use directly in the eval script. In this case simply leave out the `image_folder` option and the eval script and instead pass in the `input_h5`, `input_json` to your preprocessed files. This will make more sense once you read the section below :)
-
-**Running a live demo**. With OpenCV 3 installed you can caption video stream from camera in real time. Follow the instructions in [torch-opencv](https://github.com/VisionLabs/torch-opencv/wiki/installation) to install it and run `videocaptioning.lua` similar to `eval.lua`. Note that only central crop will be captioned.
-
-### I'd like to train my own network on MS COCO
-
-Great, first we need to some preprocessing. Head over to the `coco/` folder and run the IPython notebook to download the dataset and do some very simple preprocessing. The notebook will combine the train/val data together and create a very simple and small json file that contains a large list of image paths, and raw captions for each image, of the form:
-
-```
-[{ "file_path": "path/img.jpg", "captions": ["a caption", "a second caption of i"tgit ...] }, ...]
-```
-
-Once we have this, we're ready to invoke the `prepro.py` script, which will read all of this in and create a dataset (an hdf5 file and a json file) ready for consumption in the Lua code. For example, for MS COCO we can run the prepro file as follows:
-
-```bash
-$ python prepro.py --input_json coco/coco_raw.json --num_val 5000 --num_test 5000 --images_root coco/images --word_count_threshold 5 --output_json coco/cocotalk.json --output_h5 coco/cocotalk.h5
-```
-
-This is telling the script to read in all the data (the images and the captions), allocate 5000 images for val/test splits respectively, and map all words that occur <= 5 times to a special `UNK` token. The resulting `json` and `h5` files are about 30GB and contain everything we want to know about the dataset.
-
-**Warning**: the prepro script will fail with the default MSCOCO data because one of their images is corrupted. See [this issue](https://github.com/karpathy/neuraltalk2/issues/4) for the fix, it involves manually replacing one image in the dataset.
-
-The last thing we need is the [VGG-16 Caffe checkpoint](http://www.robots.ox.ac.uk/~vgg/research/very_deep/), (under Models section, "16-layer model" bullet point). Put the two files (the prototxt configuration file and the proto binary of weights) somewhere (e.g. a `model` directory), and we're ready to train!
-
-```bash
-$ th train.lua -input_h5 coco/cocotalk.h5 -input_json coco/cocotalk.json
-```
-
-The train script will take over, and start dumping checkpoints into the folder specified by `checkpoint_path` (default = current folder). You also have to point the train script to the VGGNet protos (see the options inside `train.lua`).
-
-If you'd like to evaluate BLEU/METEOR/CIDEr scores during training in addition to validation cross entropy loss, use `-language_eval 1` option, but don't forget to download the [coco-caption code](https://github.com/tylin/coco-caption) into `coco-caption` directory.
-
-**A few notes on training.** To give you an idea, with the default settings one epoch of MS COCO images is about 7500 iterations. 1 epoch of training (with no finetuning - notice this is the default) takes about 1 hour and results in validation loss ~2.7 and CIDEr score of ~0.4. By iteration 70,000 CIDEr climbs up to about 0.6 (validation loss at about 2.5) and then will top out at a bit below 0.7 CIDEr. After that additional improvements are only possible by turning on CNN finetuning. I like to do the training in stages, where I first train with no finetuning, and then restart the train script with `-finetune_cnn_after 0` to start finetuning right away, and using `-start_from` flag to continue from the previous model checkpoint. You'll see your score rise up to about 0.9 CIDEr over ~2 days or so (on MS COCO).
-
-### I'd like to train on my own data
-
-No problem, create a json file in the exact same form as before, describing your JPG files:
-
-```
-[{ "file_path": "path/img.jpg", "captions": ["a caption", "a similar caption" ...] }, ...]
-```
-
-and invoke the `prepro.py` script to preprocess all the images and data into and hdf5 file and json file. Then invoke `train.lua` (see detailed options inside code).
-
-### I'd like to distribute my GPU trained checkpoints for CPU
-
-Use the script `convert_checkpoint_gpu_to_cpu.lua` to convert your GPU checkpoints to be usable on CPU. See inline documentation for why this separate script is needed. For example:
-
-```bash
-th convert_checkpoint_gpu_to_cpu.lua gpu_checkpoint.t7
-```
-
-write the file `gpu_checkpoint.t7_cpu.t7`, which you can now run with `-gpuid -1` in the eval script.
-
-### License
-
-BSD License.
-
-### Acknowledgements
-
-Parts of this code were written in collaboration with my labmate [Justin Johnson](http://cs.stanford.edu/people/jcjohns/). 
-
-I'm very grateful for [NVIDIA](https://developer.nvidia.com/deep-learning)'s support in providing GPUs that made this work possible.
-
-I'm also very grateful to the maintainers of Torch for maintaining a wonderful deep learning library.
+W266
+
+Noah Randolph, Harry Xu
+
+22 April 2018
+
+Abstract
+========
+
+A potential enhancement to image caption generation, building on a
+recent innovation called OBJECT2TEXT (Yin & Ordonez, 2017) is explored.
+OBJECT2TEXT is an encoder that can be used to train models on images
+from the MS-COCO dataset (Lin, et al., 2014), which have objects within
+images labeled with rectangular extents and object categories (e.g. dog,
+car, table). This paper attempts to capture potentially useful
+information in the form of relative object areas and perimeters within
+images to improve image caption generation. Several models are created
+and results are analyzed on size and depth descriptions in the resulting
+generated captions. Evidence in the form of image captions from baseline
+and modified models shows a difference in the presence of size and depth
+related words. However broad word counts across all the models reveal
+the effect to be small and inconsistent.
+
+Introduction
+============
+
+Image captioning presents a unique challenge in two fields: computer
+vision and natural language processing. It showcases the ability for the
+computer to understand the objects in an image while producing human
+readable descriptions. There have been many approaches to image
+captioning, with the latest successes building from the deep learning
+framework, where neural networks are utilized to understand images as
+well as produce captions. We investigate a recent paper, “OBJ2TEXT:
+Generating Visually Descriptive Language from Object Layouts” (Yin &
+Ordonez, 2017), which utilizes a sequence to sequence model to encode
+the objects and their locations in an image as an input sequence to an
+LSTM and decode the representation with an LSTM language model. We
+implement their framework while exploring additional modifications to
+improve upon the results. Specifically, we seek to increase the model’s
+understanding of the images by inputting additional object attributes
+such as the notion of object size. We propose that by adding these
+features, our language model will be able to produce more meaningful
+captions with object relations better known.
+
+Background 
+===========
+
+The paper by Yin & Ordonez, *OBJ2TEXT*, utilizes a related work, *You
+Only Look Once* (YOLO)*: Unified, Real-Time Object Detection* (Redmon &
+Farhadi, 2017). YOLO is a new approach to object detection which
+encapsulates the entire image detection task into one convolutional
+neural network. It treats object detection as a single regression
+problem and uses a CNN to train and predict the objects in an image’s
+bounding box as well as classify the object type. YOLO’s improvement on
+the previous image recognition frameworks is increased speed that can be
+offered by only having one CNN and which also allows for real time
+object detection.
+
+OBJ2TEXT is combined with YOLO to encode objects for use in a natural
+language system. Using object locations in the images as well as the
+number of each category as features, OBJ2TEXT-YOLO is combined with an
+image caption generation model, based on Neuraltalk2 (K., 2016), that
+combines a convolutional neural net for image classification whose
+information is encoded into a vector for input into a recurrent neural
+network language model. OBJECT2TEXT-YOLO is an encoder that can be used
+to train models on images from the MS-COCO dataset (Lin, et al., 2014).
+MS-COCO dataset image annotations include objects labeled from a
+selection of categories (e.g. dog, car, table). The objects are
+identified in the images through two means, one of which is segmentation
+and the other using rectangular extents. OBJECT2TEXT-YOLO does not use
+the objects labeled in the MS-COCO dataset for training, and instead
+encodes them on its own (using YOLO) prior to training on MS-COCO image
+captions.
+
+The idea behind encoding object information when you already have all of
+the image pixel information follows previous work using clipart scenes
+(Zitnick, et al., 2013), where the attempt is to separate pattern
+recognition (in pixels) from visual meaning.
+
+Methods
+=======
+
+Using 200,000 training iterations, the performance and caption results
+of the Location Encoder and category word embedding of each object in an
+image, with a max sampling decoder (temperature = 1.0), is used as a
+baseline. The baseline comes from Yin & Ordonez, 2017 and is briefly
+described below.
+
+Both the encoder and decoder are trained according to Equation 1.
+
+[![](./media/image44.png){width="4.305555555555555in"
+height="0.5277777777777778in"}](about:blank)
+
+Where ![](./media/image85.png){width="0.18055555555555555in"
+height="0.125in"} includes both the encoder and decoder parameters,
+![](./media/image66.png){width="0.20833333333333334in"
+height="0.1527777777777778in"} and
+![](./media/image62.png){width="0.2222222222222222in"
+height="0.1527777777777778in"}.
+[![](./media/image74.png){width="0.1388888888888889in"
+height="0.125in"}](about:blank) is the number of training observations.
+[![](./media/image61.png){width="0.16666666666666666in"
+height="0.125in"}](about:blank) is a target caption.
+[![](./media/image68.png){width="0.16666666666666666in"
+height="0.16666666666666666in"}](about:blank) is the encoded object
+layout and category of image
+[![](./media/image82.png){width="8.333333333333333e-2in"
+height="8.333333333333333e-2in"}](about:blank) at time
+[![](./media/image81.png){width="0.4722222222222222in"
+height="0.1527777777777778in"}](about:blank) (the end of the encoding
+step) to generate caption
+[![](./media/image60.png){width="8.333333333333333e-2in"
+height="8.333333333333333e-2in"}](about:blank), computed as in Equation
+2.
+
+[![](./media/image49.png){width="3.9583333333333335in"
+height="0.18055555555555555in"}](about:blank)
+
+Where [![](./media/image53.png){width="6.944444444444445e-2in"
+height="8.333333333333333e-2in"}](about:blank) stands for encoder. The
+input [![](./media/image4.png){width="0.1388888888888889in"
+height="0.1111111111111111in"}](about:blank) is defined as in Equation
+3.
+
+[![](./media/image22.png){width="3.8333333333333335in"
+height="0.18055555555555555in"}](about:blank)
+
+Where [![](./media/image71.png){width="0.2222222222222222in"
+height="0.1527777777777778in"}](about:blank) is a category word
+embedding matrix, the categories are represented in a one-hot vector in
+[![](./media/image80.png){width="0.125in"
+height="0.1111111111111111in"}](about:blank).
+[![](./media/image33.png){width="0.19444444444444445in"
+height="0.1527777777777778in"}](about:blank) and
+[![](./media/image70.png){width="9.722222222222222e-2in"
+height="0.1527777777777778in"}](about:blank) comprise the parameters of
+the object location encoder, and
+[![](./media/image52.png){width="8.333333333333333e-2in"
+height="0.1527777777777778in"}](about:blank) is the object location
+vector containing the x and y coordinates as well as the width and
+height of the object input at time
+[![](./media/image50.png){width="4.1666666666666664e-2in"
+height="0.1111111111111111in"}](about:blank).
+
+The generated caption
+[![](./media/image63.png){width="8.333333333333333e-2in"
+height="8.333333333333333e-2in"}](about:blank) is determined according
+to Equation 4.
+
+[![](./media/image65.png){width="4.375in"
+height="0.5277777777777778in"}](about:blank)
+
+Where [![](./media/image54.png){width="8.333333333333333e-2in"
+height="0.125in"}](about:blank) stands for decoder and
+[![](./media/image78.png){width="0.9444444444444444in"
+height="0.20833333333333334in"}](about:blank) computes a vector of the
+hidden states of the decoder LSTM.
+[![](./media/image32.png){width="0.1527777777777778in"
+height="0.20833333333333334in"}](about:blank) is computed as in Equation
+5.
+
+[![](./media/image69.png){width="4.166666666666667in"
+height="0.20833333333333334in"}](about:blank)
+
+Where [![](./media/image64.png){width="0.20833333333333334in"
+height="0.1527777777777778in"}](about:blank) is a category embedding
+matrix for caption sequence of symbols.
+
+With the baseline described as in the equations above, our modifications
+include altering the location configuration vector
+[![](./media/image86.png){width="8.333333333333333e-2in"
+height="0.1527777777777778in"}](about:blank) by replacing the object
+width and height dimensions with object area and perimeter. The model is
+shown in Figure 1, below.
+
+![](./media/image79.png){width="4.643524715660543in"
+height="3.4739588801399823in"}
+
+Figure 1. Model layout from Yin & Ordonez, 2017 is shown above. The
+Location Encoder in box (b) is modified from containing width
+[![](./media/image34.png){width="0.16666666666666666in"
+height="0.1111111111111111in"}](about:blank) and height
+[![](./media/image39.png){width="0.125in"
+height="0.1527777777777778in"}](about:blank) to containing area
+[![](./media/image55.png){width="0.5in"
+height="0.1527777777777778in"}](about:blank) and perimeter
+[![](./media/image84.png){width="0.9444444444444444in"
+height="0.18055555555555555in"}](about:blank).
+
+The modified Location Encoder that includes area (width x height) of the
+object bounding boxes is then also trained with 200,000 iterations to be
+compared against the baseline both qualitatively and with the Bleu-4
+score.
+
+Further analysis for comparison is made by including the Neuraltalk2
+image caption generator word embeddings (K., 2016), which is the more
+familiar pixel-based pattern recognizing CNN-RNN caption generator,
+along with the object embeddings in OBJ2TEXT-YOLO. The full model is
+trained as another baseline to compare against another full model that
+includes the aforementioned Location Encoder modified to include area
+and perimeter.
+
+Lastly, the baseline and modified models (objects only, no CNN derived
+word embeddings) are altered to include a beam search in the decoding
+RNN. Width 5 is used according to custom as well as to keep GPU time to
+a minimum.
+
+For all models above, in addition to score metrics, qualitative
+assessments of size and orientation word counts (e.g. large, small,
+back, front) in the generated captions are computed to observe
+characteristic changes in captions generated between the models, in
+order to assess whether depth and size information is generated as
+predicted. Figure 2, below, is a summary of all the model configurations
+that were tested and will be discussed in the next session.
+
+![](./media/image83.png){width="5.752101924759405in"
+height="2.7552088801399823in"}
+
+Figure 2. Summary of the model variations tested. The first column
+contains the baselines, where the YOLO-generated object positions are
+not modified.
+
+Results and Discussion
+======================
+
+Initial results were very promising, as the image in Figure 3, below,
+was quickly found to show evidence of the position code modifications
+having an effect. You can see how the modified object embedding (using
+area) may have caused the difference in size of the elephants in the
+photo’s generated caption.
+
+  --------------------------------------------------------------------------------------------
+  ![](./media/image67.png){width="2.811897419072616in" height="1.8798195538057743in"}
+  --------------------------------------------------------------------------------------------
+  *Training captions*:
+  
+  -   Two elephant walking, the one in the foreground kicking up a some dirt.
+  
+  -   Two elephants walk around in a large grassy field.
+  
+  -   two elephants with long walking through the grass
+  
+  -   An elephant kicking some dirt on the ground.
+  
+  -   two very big elephants walking in the wild
+  
+
+  *Objects-only generated baseline caption*:
+  
+  -   two elephants standing in a field with trees in the background
+  
+
+  *Objects-only generated caption with position code including area & width*:
+  
+  -   a **baby** elephant standing next to a **larger** elephant (bolded words for emphasis)
+  
+  --------------------------------------------------------------------------------------------
+
+Figure 3. Initial promising results showing potential effect of object
+position code modifications, reflected in size words present in
+generated caption.
+
+Observing the size-and-depth-related word counts between the baseline
+and different variations of area and width in the object position code
+leads to much less conclusive results, as seen below in Figure 4. Area
+and perimeter models dominate in counts of the words ‘background,’
+‘large,’ ‘back,’ ‘short,’ and ‘tall,’ especially the words ‘back’ and
+‘background.’ However, the baseline dominates the counts of ‘front’ and
+‘short.’
+
+![](./media/image51.png){width="6.145444006999125in"
+height="4.057292213473316in"}
+
+Figure 4. Word counts of size-and-depth-related words between the
+baseline (red) and the modified object-only models (yellow, blue, and
+green) reveal mixed results.
+
+Given the mixed results of the models above, two more variations of the
+model were implemented, one of which included adding the CNN-RNN
+Neuraltalk2 image caption generator word embeddings (K., 2016). The
+other variation involved changing the decoder from max sampling
+(temperature = 1.0) to a beam search decoder with beam width k = 5.
+Results of the two variations are shown in Figure 5 and Figure 6, below.
+The size-and-depth-related word counts are even less conclusive than the
+original object-only results. In fact, the CNN-RNN Neuraltalk2 inclusion
+seemed to reverse the effect of the width and area in the object
+position code (K., 2016). Both models in Figures 5 and 6 narrow the gap
+between word count differences amongst the baseline and modified models
+when compared to the models in Figure 4.
+
+![](./media/image77.png){width="5.578125546806649in"
+height="3.5962128171478565in"}
+
+> Figure 5. This plot shows the baseline and modified object position
+> code models with included CNN-RNN NeuralTalk2 word embeddings (K.,
+> 2016).
+
+![](./media/image59.png){width="5.505208880139983in"
+height="3.5435826771653542in"}
+
+> Figure 6. This plot shows the objects-only baseline and modified
+> object position code models with a decoder beam search of width k = 5.
+
+Below, we look in detail at several captions generated by the models
+described thus far. First, the five ground-truth captions from the COCO
+dataset are shown, followed by captions generated by each aforementioned
+model.
+
+![](./media/image31.png){width="4.963542213473316in"
+height="3.3090277777777777in"}
+
+Figure 7. Image ID 562805
+
+Ground-truth captions:
+
+1.  A modern transportation building with busses lined up for
+    > passengers.
+
+2.  A bus station with buses and people nearby.
+
+3.  Buses parked at a bus stop while unloading passengers.
+
+4.  A bus depot with buses parked in front.
+
+5.  some people buildings and three different buses and a tree
+
+Generated captions:
+
+                            **original, unmodified object position code**          **with modified object position code**
+  ------------------------- ------------------------------------------------------ -----------------------------------------------------------
+  **max search decoder**    a group of people standing on a street next to a bus   a bus is driving down the street with a bus **behind** it
+  **beam search decoder**   a group of people standing in a parking lot            a couple of buses that are sitting in the street
+  **including CNN-RNN**     a group of people standing on a city street            a bus is driving down the street with people walking
+
+For the captions generated by the Figure 7, only one model (in the top
+right cell) included a size or depth related word to describe the
+relation between two similar objects. The top left cell includes the
+positional phrase ‘next to,’ but it’s referring to two different objects
+(people and bus). Since two different objects can have different sizes,
+it’s unlikely for ‘next to’ in this case to be related to the object
+position code (which happens to be unmodified). It would only make sense
+for the sizes or positions of two similar objects (that have presumably
+the same real world size, like two buses) to be affected by the object
+position code.
+
+![](./media/image38.png){width="4.901042213473316in"
+height="3.25950678040245in"}
+
+Figure 8. Image ID 198178
+
+Ground-truth captions:
+
+1.  A large elephant standing next to a small elephant.
+
+2.  An adult and baby elephant walking beside each other.
+
+3.  Adult elephant with young walking in grassy area.
+
+4.  And elephant walks with its baby elephant.
+
+5.  A big and a small elephant out in the sun
+
+Generated captions:
+
+                            **original, unmodified object position code**       **with modified object position code**
+  ------------------------- --------------------------------------------------- ------------------------------------------------------------
+  **max search decoder**    a large elephant standing next to a tree            a **large** elephant standing next to a **baby** elephant
+  **beam search decoder**   an elephant standing in the middle of a field       a **large** elephant standing next to a **baby** elephant
+  **including CNN-RNN**     a couple of elephants standing next to each other   a **baby** elephant standing next to a **bigger** elephant
+
+The iconic image of two elephants in Figure 8 results in captions with
+modified object position codes clearly expressing size relationships
+between the elephants. Contrast that to the captions generated by the
+original object position code, where there are no relational words to
+describe size or depth differences between elephants. The top left
+cell’s caption does include the word ‘large’ but it is not in relation
+to another elephant.
+
+![](./media/image76.png){width="4.9812346894138235in"
+height="3.2968755468066493in"}
+
+Figure 9. Image ID 322307
+
+Ground-truth captions:
+
+1.  A mama elephant standing next to a baby elephant in a cage at a zoo.
+
+2.  An elephant in a cage with its baby.
+
+3.  a baby elephant and a large elephant standing near one another
+
+4.  A ELEPHANT IS WALKING NEXT TO ITS BABY CUTIE!
+
+5.  The baby elephant stays close to its mother.
+
+Generated captions:
+
+                            **original, unmodified object position code**                       **with modified object position code**
+  ------------------------- ------------------------------------------------------------------- ------------------------------------------------------------
+  **max search decoder**    two elephants are standing in a field of grass                      a **baby** elephant standing next to a **larger** elephant
+  **beam search decoder**   a couple of elephants standing next to each other                   a **large** elephant standing next to a **baby** elephant
+  **including CNN-RNN**     a **baby** elephant is standing in front of a **larger** elephant   a **baby** elephant standing next to a **bigger** elephant
+
+Note that there are many elephant photos in the COCO dataset. The
+captions generated by Figure 9, as in Figure 8, include size relations
+between the elephant objects in the image. However, this time the model
+with the original object position code that includes the NeuralTalk2
+CNN-RNN caught the size differences of the elephants as well.
+
+![](./media/image75.png){width="5.010416666666667in"
+height="3.365345581802275in"}
+
+Figure 10. Image ID 490860
+
+Ground-truth captions:
+
+1.  A baby elephant panting on a white canvas.
+
+2.  A baby elephant is painting a picture with it's trunk.
+
+3.  An elephant is standing in the dirt drawing on an easel with its
+    > trunk.
+
+4.  An elephant touching a drawing on an easel with his trunk.
+
+5.  An elephant drawing a picture with it's trunk.
+
+Generated captions:
+
+                            **original, unmodified object position code**       **with modified object position code**
+  ------------------------- --------------------------------------------------- -----------------------------------------------------------
+  **max search decoder**    a couple of elephants standing next to each other   a **large** elephant standing next to a **baby** elephant
+  **beam search decoder**   a couple of elephants standing next to each other   a **large** elephant standing next to a **baby** elephant
+  **including CNN-RNN**     a group of elephants standing in a field            a couple of elephants standing next to each other
+
+Captions generated by Figure 10, as with the previous figures’ generated
+captions,, show a tendency to include more size words with the modified
+object position code than with the original object position code.
+
+While the above examples display evidence that the modified object
+position code may have the predicted effect of influencing size and
+depth relations in generated captions, the effect is mild and
+inconsistent. It is also not possible, with the image selection methods
+used, to rule out random chance in seeing generated captions as shown
+above. In fact, in order to find the images used as examples, search
+algorithms were used that actually lead to the results shown. More
+rigorous statistical analysis is needed to conclusively declare whether
+the modified object position code has the predicted effect (or to reject
+the null hypothesis that there is no effect of the modified object
+position code).
+
+Finally, for completeness, the Bleu-4 scores are shown below, in Figure
+11. Note that performance improvement of standard scoring metrics was
+not a goal of this project.
+
+![](./media/image72.png){width="6.5in" height="3.8472222222222223in"}
+
+> Figure 11. The performance standard (Bleu-4) scoring for each of the
+> caption generating models. For the modified object position code
+> models, “P” stands for perimeter, “W” stands for width, and “A” stands
+> for area.
+
+The results in Figure 11 are likely to be unrelated to the object
+position code. It is not surprising that the models including the CNN
+from NeuralTalk2 (K., 2016) are higher than the object only, max search
+decoded models, since the image pixels constitute many more features
+from which the model acquires information. Nor is it surprising that the
+models utilizing a beam search decoder outperform models with a max
+search decoder, since by definition there are more opportunities to pick
+the best sequence of words.
+
+Conclusion
+==========
+
+We proposed that by adding the area and perimeter of object bounding
+boxes to our language model, it would be able to produce more meaningful
+captions with object relations better known. While our attempts at
+adding the object attribute of size had little improvement in increasing
+the Bleu score of our model, we did find instances where encoding these
+attributes appeared to lead the model to be more descriptive in regard
+to the object size differences in images, as long as the objects being
+compared in the caption were of the same category. We have some evidence
+that our attribute addition also allowed for our model to have a better
+sense of depth and relation within the image of the objects.
+Implementing OBJ2TEXT and training on the COCO dataset was challenging
+and required twelve hours per 200,000 images utilizing four GPUs. Given
+the computational expense of running OBJ2TEXT, we were limited in only
+exploring a few model additions. Given more time, we would perform a
+rigorous statistical analysis of the results to separate actual effect
+from random chance.
+
+References
+==========
+
+Karpathy, A., & Fei-Fei, L. (2015, 06). Deep visual-semantic alignments
+for generating image descriptions. *2015 IEEE Conference on Computer
+Vision and Pattern Recognition (CVPR)*. doi:10.1109/cvpr.2015.7298932
+
+K. (2016, September 23). Karpathy/neuraltalk2. Retrieved from
+https://github.com/karpathy/neuraltalk2/
+
+Lin, T., Maire, M., Belongie, S., Hays, J., Perona, P., Ramanan, D., . .
+. Zitnick, C. L. (2014). Microsoft COCO: Common Objects in Context.
+*Computer Vision – ECCV 2014 Lecture Notes in Computer Science,*
+740-755. doi:10.1007/978-3-319-10602-1\_48
+
+Redmon, J., & Farhadi, A. (2017, 07). YOLO9000: Better, Faster,
+Stronger. *2017 IEEE Conference on Computer Vision and Pattern
+Recognition (CVPR)*. doi:10.1109/cvpr.2017.690
+
+T. (2018, January 20). Tensorflow/models. Retrieved from
+https://github.com/tensorflow/models/tree/master/research/im2txt
+
+Vinyals, O., Toshev, A., Bengio, S., & Erhan, D. (2017, 04). Show and
+Tell: Lessons Learned from the 2015 MSCOCO Image Captioning Challenge.
+*IEEE Transactions on Pattern Analysis and Machine Intelligence,*
+*39*(4), 652-663. doi:10.1109/tpami.2016.2587640
+
+Yin, X., & Ordonez, V. (2017). Obj2Text: Generating Visually Descriptive
+Language from Object Layouts. *Proceedings of the 2017 Conference on
+Empirical Methods in Natural Language Processing*.
+doi:10.18653/v1/d17-1017
+
+Zitnick, C. L., Parikh, D., & Vanderwende, L. (2013, 12). Learning the
+Visual Interpretation of Sentences. *2013 IEEE International Conference
+on Computer Vision*. doi:10.1109/iccv.2013.211
