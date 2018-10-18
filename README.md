@@ -1,3 +1,10 @@
+---
+subtitle: |
+    []{#_wta4nfr2e0ez .anchor}Image Caption Generation Using Object
+    Information
+title: '[]{#_lqq7syv24y5k .anchor}Objectifying Captions'
+---
+
 W266
 
 Noah Randolph, Harry Xu
